@@ -1,2 +1,2 @@
 # qr-pay
-QR code payment web app
+QR code payment web app.
