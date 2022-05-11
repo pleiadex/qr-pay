@@ -24,7 +24,13 @@
               <v-btn
                 class="mr-2 mb-3"
                 outlined
-                rounded>
+                rounded
+                :to="{
+                  name: 'login',
+                  params: {
+                    marketId: market.id
+                  }
+                }">
                 참여하기
               </v-btn>
             </v-card-actions>
@@ -50,22 +56,17 @@ export default {
       // TODO: it should fetch market metadata from backend
       markets: [
         {
+          id: 1,
           title: '여주초 5학년 5반 시장',
           numParticipant: 11
         },
         {
+          id: 2,
           title: '여주초 5학년 5반 시장',
           numParticipant: 11
         },
         {
-          title: '여주초 5학년 5반 시장',
-          numParticipant: 11
-        },
-        {
-          title: '여주초 5학년 5반 시장',
-          numParticipant: 11
-        },
-        {
+          id: 3,
           title: '여주초 5학년 5반 시장',
           numParticipant: 11
         }
