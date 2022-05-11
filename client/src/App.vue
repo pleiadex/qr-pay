@@ -1,13 +1,20 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <v-app>
+      <page-header></page-header>
+      <main>
+        <router-view/>
+      </main>
+    </v-app>
   </div>
 </template>
 
 <script>
+import PageHeader from '@/components/Header'
 export default {
-  name: 'App'
+  components: {
+    PageHeader
+  }
 }
 </script>
 
