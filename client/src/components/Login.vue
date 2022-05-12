@@ -24,14 +24,35 @@ export default {
     }
   },
   // TODO: Fetch title of the market corresponding to marketId
+  // TODO: 로그인이 되어 있어도 몇번 시장으로 로그인되어 있는지 확인해야 됨!!!
   mounted () {
     const title = '여주초 5학년 5반 시장'
     this.title = title
+    // if (this.$store.state.isUserLoggedIn) {
+    //   const marketId = this.$store.state.route.params.marketId
+    //   this.$router.push({
+    //     name: 'dashboard',
+    //     params: {
+    //       marketId: marketId
+    //     }
+    //   })
+    // }
   },
   methods: {
-    async login () {
+    login () {
       try {
-        await console.log('Login is activate')
+        const marketId = this.$store.state.route.params.marketId
+        console.log('marketID', marketId)
+
+        // test code
+        this.$store.state.isUserLoggedIn = true
+
+        this.$router.push({
+          name: 'dashboard',
+          params: {
+            marketId: marketId
+          }
+        })
       } catch (err) {
         console.log(err)
         this.error = err

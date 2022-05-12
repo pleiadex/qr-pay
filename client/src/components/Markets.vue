@@ -57,17 +57,17 @@ export default {
       markets: [
         {
           id: 1,
-          title: '여주초 5학년 5반 시장',
+          title: '여주초 1학년 1반 시장',
           numParticipant: 11
         },
         {
           id: 2,
-          title: '여주초 5학년 5반 시장',
+          title: '여주초 2학년 2반 시장',
           numParticipant: 11
         },
         {
           id: 3,
-          title: '여주초 5학년 5반 시장',
+          title: '여주초 3학년 3반 시장',
           numParticipant: 11
         }
       ]

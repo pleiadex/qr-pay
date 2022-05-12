@@ -10,16 +10,39 @@
         </v-app-bar-title>
         <v-spacer></v-spacer>
         <v-btn
+          v-if="$store.state.route.name === 'markets'"
+          class='ml-2'
           text
           dark>
           시장 만들기
+        </v-btn>
+        <v-btn
+          v-if="$store.state.isUserLoggedIn"
+          class='ml-2'
+          text
+          dark
+          @click='logout'>
+          로그아웃
         </v-btn>
     </v-app-bar>
 </template>
 
 <script>
 export default {
-
+  data () {
+    return {
+      mode: null
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setUser', null)
+      this.$router.push({
+        name: 'markets'
+      })
+    }
+  }
 }
 </script>
 

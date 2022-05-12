@@ -20,7 +20,7 @@ new Vue({
   router,
   store,
   icons: {
-    iconfont: 'md'
+    iconfont: 'mdiSvg'
   },
   vuetify: new Vuetify(),
   components: { App },
