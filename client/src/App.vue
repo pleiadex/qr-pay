@@ -27,4 +27,15 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.market-h1 {
+  text-align: left;
+  margin-left: 5px;
+}
+.market-h2 {
+  text-align: left;
+  margin-left: 5px;
+}
+.danger-alert {
+  color: red;
+}
 </style>

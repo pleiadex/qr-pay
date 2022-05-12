@@ -170,12 +170,4 @@ export default {
 </script>
 
 <style scoped>
-.market-h1 {
-  text-align: left;
-  margin-left: 10px;
-}
-.market-h2 {
-  text-align: left;
-  margin-left: 10px;
-}
 </style>
