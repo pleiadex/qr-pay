@@ -11,6 +11,7 @@
           rounded
           color="deep-purple lighten-1"
           dark
+          @click="moveTo('purchase')"
         >
           구매하기
         </v-btn>
@@ -19,6 +20,7 @@
           rounded
           color="blue"
           dark
+          @click="moveTo('sell')"
         >
           판매하기
         </v-btn>
@@ -80,6 +82,7 @@
 export default {
   data () {
     return {
+      marketId: null,
       page: 1,
       pageCount: 0,
       itemsPerPage: 5,
@@ -164,6 +167,14 @@ export default {
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     numeberWithComma (num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
+    moveTo (route) {
+      this.$router.push({
+        name: route,
+        params: {
+          marketId: this.$store.state.route.params.marketId
+        }
+      })
     }
   }
 }

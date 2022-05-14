@@ -67,16 +67,16 @@ export default {
 
 .modal-header h3 {
   margin-top: 0;
-  color: #42b983;
+  color: #3478e7;
 }
 
 .modal-body {
   margin: 20px 0;
 }
 
-.modal-default-button {
-  /* float: right; */
-}
+/* .modal-default-button {
+  float: right;
+} */
 .modal-enter {
   opacity: 0;
 }

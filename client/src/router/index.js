@@ -5,6 +5,8 @@ import Dashboard from '@/components/Dashboard'
 import Login from '@/components/Login'
 import Sell from '@/components/Sell'
 import Purchase from '@/components/Purchase'
+import CreateMarket from '@/components/CreateMarket'
+import Admin from '@/components/Admin'
 
 Vue.use(Router)
 
@@ -14,6 +16,11 @@ export default new Router({
       path: '/markets',
       name: 'markets',
       component: Markets
+    },
+    {
+      path: '/markets/create',
+      name: 'createMarket',
+      component: CreateMarket
     },
     {
       path: '/markets/:marketId',
@@ -34,6 +41,11 @@ export default new Router({
       path: '/markets/:marketId/purchase',
       name: 'purchase',
       component: Purchase
+    },
+    {
+      path: '/markets/:marketId/admin',
+      name: 'admin',
+      component: Admin
     },
     {
       path: '*',

@@ -47,12 +47,24 @@ export default {
         // test code
         this.$store.state.isUserLoggedIn = true
 
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            marketId: marketId
-          }
-        })
+        // TODO: 존재하는 아이디이면 에러 발생하기
+
+        // 관리자 계정으로 로그인 시 관리자 페이지로 넘어가고, 아니면 게스트 대시보드로 넘어가기
+        if (this.id === 'admin') {
+          this.$router.push({
+            name: 'admin',
+            params: {
+              marketId: marketId
+            }
+          })
+        } else {
+          this.$router.push({
+            name: 'dashboard',
+            params: {
+              marketId: marketId
+            }
+          })
+        }
       } catch (err) {
         console.log(err)
         this.error = err

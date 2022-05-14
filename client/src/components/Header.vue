@@ -13,7 +13,8 @@
           v-if="$store.state.route.name === 'markets'"
           class='ml-2'
           text
-          dark>
+          dark
+          :to="{name: 'createMarket'}">
           시장 만들기
         </v-btn>
         <v-btn
