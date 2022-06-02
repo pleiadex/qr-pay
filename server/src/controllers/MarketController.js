@@ -1,13 +1,13 @@
 const {Market, User, sequelize} = require('../models')
-// const jwt = require('jsonwebtoken')
-// const config = require('../config/config')
+const jwt = require('jsonwebtoken')
+const config = require('../config/config')
 
-// function jwtSignUser (user) {
-//   const ONE_WEEK = 60 * 60 * 24 * 7;
-//   return jwt.sign(user, config.authentication.jwtSecret, {
-//       expiresIn: ONE_WEEK
-//   })
-// }
+function jwtSignUser (user) {
+  const ONE_WEEK = 60 * 60 * 24 * 7;
+  return jwt.sign(user, config.authentication.jwtSecret, {
+      expiresIn: ONE_WEEK
+  })
+}
 
 
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
       }
       const newMarket = await Market.create(marketData)
 
-      // check if there is any duplicate user name in the same market
+      // Check if there is any duplicate user name in the same market
       const user = await User.findAll({
         where: {
           name: req.body.name,
@@ -58,20 +58,21 @@ module.exports = {
       }
 
       // Construct new user information; marketId
-      const userData = {
+      const newUserData = {
         name: req.body.name,
         password: req.body.password,
         MarketId: newMarket.id,
         isAdmin: true
       }
 
-      // TODO: Create the user
-      const newUser = await User.create(userData)
-
-
+      // Create the user
+      const newUser = await User.create(newUserData)
+      const newUserJson = newUser.toJSON()
       // TODO: Send the created market info and jwt token back (User Id, JWT token)
       res.send({
-        newMarket, newUser
+        market: newMarket,
+        user: newUserJson,
+        token: jwtSignUser(newUserJson)
       })
 
 

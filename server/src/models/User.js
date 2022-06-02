@@ -24,9 +24,6 @@ module.exports = (sequelize, DataType) => {
         isAdmin: DataType.BOOLEAN
     }, 
     {
-        timestamps: false
-    },
-    {
         hooks: {
             beforeCreate: hashPassword,
             beforeUpdate: hashPassword,
@@ -35,9 +32,10 @@ module.exports = (sequelize, DataType) => {
         indexes: [
           {
             unique: true,
-            fields: ['name', 'marketId']
+            fields: ['name', 'MarketId']
           }
-        ]
+        ],
+        timestamps: false
     })
     User.prototype.comparePassword = function (password) {
         return bcrypt.compareAsync(password, this.password)

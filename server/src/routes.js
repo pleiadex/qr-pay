@@ -1,6 +1,10 @@
+const AuthenticationController = require("./controllers/AuthenticationController")
 const MarketController = require("./controllers/MarketController")
 
 module.exports = (app) => {
+  app.post('/markets/:marketId', 
+  AuthenticationController.login
+)
   app.get('/markets', 
     MarketController.index
   )
