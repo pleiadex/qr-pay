@@ -1,0 +1,21 @@
+[
+  {
+    "name": "test1",
+    "password": "1q2w3e4r",
+    "MarketId": 1,
+    "isAdmin": true
+
+  },
+  {
+    "name": "test2",
+    "password": "1q2w3e4r",
+    "MarketId": 1,
+    "isAdmin": false
+  },
+  {
+    "name": "test3",
+    "password": "1q2w3e4r",
+    "MarketId": 2,
+    "isAdmin": true
+  }
+]
