@@ -37,7 +37,7 @@ module.exports = {
           token: jwtSignUser(userJson)
         })
       }
-      // TODO: else register the user
+      // Else register the user
       else {
         const newUserData = {
           name: name,

@@ -83,21 +83,40 @@ module.exports = {
       })
     }
   },
+
   async delete (req, res) {
     try {
+      // Extract the user info from jwt token
+      const userId = req.user.id
+      const userMarketId = req.user.MarketId
       const {marketId} = req.params
+
+      // TODO: Check if the user is authroized from jwt token
+      const isAuthorized = (await User.findOne({
+        where: {
+          id: userId,
+          MarketId: userMarketId
+        }
+      })).isAdmin
+
+      // Compare market id from token and url parameter market id
+      if (!userMarketId === marketId || !isAuthorized) {
+        return res.status(401).send({
+          error: 'You do not have access to delete this market'
+        })
+      }
+
       const market = await Market.findOne({
         where: {
-          id: marketId
+          id: userMarketId
         }
       })
       
       if (!market) {
         return res.status(401).send({
-          error: 'You do not have access to delete this market'
+          error: 'This market does not exist anymore.'
         })
       }
-      console.log(market)
       await market.destroy()
       res.send(market)
     } catch (err) {
