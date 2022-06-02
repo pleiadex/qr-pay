@@ -131,6 +131,9 @@ export default {
       ]
     }
   },
+  // // TODO: Guest가 url롤 직접 랜딩할 때 권한 있는지 토큰 다시 확인하기!
+  // async mounted () {
+  // },
   methods: {
     numeberWithComma (num) {
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

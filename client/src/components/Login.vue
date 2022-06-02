@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import MarketsService from '@/services/MarketsService'
+import AuthenticationService from '@/services/AuthenticationService'
 export default {
   data () {
     return {
@@ -23,51 +25,66 @@ export default {
       title: ''
     }
   },
-  // TODO: Fetch title of the market corresponding to marketId
-  // TODO: 로그인이 되어 있어도 몇번 시장으로 로그인되어 있는지 확인해야 됨!!!
-  mounted () {
-    const title = '여주초 5학년 5반 시장'
-    this.title = title
-    // if (this.$store.state.isUserLoggedIn) {
-    //   const marketId = this.$store.state.route.params.marketId
-    //   this.$router.push({
-    //     name: 'dashboard',
-    //     params: {
-    //       marketId: marketId
-    //     }
-    //   })
-    // }
+  async mounted () {
+    // Fetch title of the market corresponding to marketId
+    const marketId = this.$store.state.route.params.marketId
+
+    // Login state 확인하고 로그인 필요 없이 자동으로 대시보드 혹은 관리자 페이지로 넘기기
+    const isUserLoggedIn = this.$store.state.isUserLoggedIn
+    const userMarketId = this.$store.state.user.MarketId
+    const isAdmin = this.$store.state.user.isAdmin
+
+    if (isUserLoggedIn && userMarketId === marketId) {
+      console.log('login passed')
+      this.switchToMainPage(isAdmin)
+    }
+
+    this.title = (await MarketsService.search(marketId)).data.title
   },
   methods: {
-    login () {
+    async login () {
       try {
         const marketId = this.$store.state.route.params.marketId
-        console.log('marketID', marketId)
 
-        // test code
-        this.$store.state.isUserLoggedIn = true
+        if (this.id.length * this.password.length === 0) {
+          console.log('Required!')
+          this.error = '아이디와 비밀번호 모두 입력해주세요'
+          return
+        }
+        const response = (await AuthenticationService.login({
+          name: this.id,
+          password: this.password
+        }, marketId)).data
 
-        // TODO: 존재하는 아이디이면 에러 발생하기
+        // Set vuex state
+        this.$store.dispatch('setToken', response.token)
+        this.$store.dispatch('setUser', response.user)
 
         // 관리자 계정으로 로그인 시 관리자 페이지로 넘어가고, 아니면 게스트 대시보드로 넘어가기
-        if (this.id === 'admin') {
-          this.$router.push({
-            name: 'admin',
-            params: {
-              marketId: marketId
-            }
-          })
-        } else {
-          this.$router.push({
-            name: 'dashboard',
-            params: {
-              marketId: marketId
-            }
-          })
-        }
+        const isAdmin = response.user.isAdmin
+        this.switchToMainPage(isAdmin)
       } catch (err) {
+        // TODO: 에러 메세지 한글로 사용자 친화적으로 반환하기; 아이디 존재할 때 혹은 그 외
         console.log(err)
         this.error = err
+      }
+    },
+    switchToMainPage (isAdmin) {
+      const marketId = this.$store.state.route.params.marketId
+      if (isAdmin) {
+        this.$router.push({
+          name: 'admin',
+          params: {
+            marketId: marketId
+          }
+        })
+      } else {
+        this.$router.push({
+          name: 'dashboard',
+          params: {
+            marketId: marketId
+          }
+        })
       }
     }
   }

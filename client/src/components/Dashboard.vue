@@ -163,6 +163,9 @@ export default {
       balance: 10000000
     }
   },
+  // // TODO: url로 직접 랜딩 시 관리자가 들어올 수 있기 때문에 확인하기
+  // async mounted () {
+  // },
   methods: {
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     numeberWithComma (num) {

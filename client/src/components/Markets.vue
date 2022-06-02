@@ -16,7 +16,7 @@
             </v-card-title>
 
             <v-card-subtitle>
-              {{market.numParticipant}}명 참여중
+              {{market.numOfUsers}}명 참여중
             </v-card-subtitle>
 
             <v-card-actions>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import MarketsSevice from '@/services/MarketsService'
 export default {
   data () {
     return {
@@ -53,25 +54,15 @@ export default {
         '#395c6b',
         '#6b4e71'
       ],
-      // TODO: it should fetch market metadata from backend
-      markets: [
-        {
-          id: 1,
-          title: '여주초 1학년 1반 시장',
-          numParticipant: 11
-        },
-        {
-          id: 2,
-          title: '여주초 2학년 2반 시장',
-          numParticipant: 11
-        },
-        {
-          id: 3,
-          title: '여주초 3학년 3반 시장',
-          numParticipant: 11
-        }
-      ]
+      markets: []
     }
+  },
+  async mounted () {
+    // Fetch the markets
+    this.markets = (await MarketsSevice.index()).data
+  },
+  methods: {
+
   }
 }
 </script>
