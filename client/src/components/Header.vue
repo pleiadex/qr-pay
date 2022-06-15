@@ -14,7 +14,7 @@
           class='ml-2'
           text
           dark
-          :to="{name: 'createMarket'}">
+          :to="{name: 'create-market'}">
           시장 만들기
         </v-btn>
         <v-btn
@@ -41,7 +41,7 @@ export default {
       this.$store.dispatch('setUser', null)
       this.$router.push({
         name: 'markets'
-      })
+      }).catch(() => {})
     }
   }
 }

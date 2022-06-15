@@ -14,11 +14,11 @@
           <div class="modal-footer">
             <slot name="footer">
               <v-row class='mx-auto'>
-                <button class='ml-5' @click="$emit('purchase')">
-                  구매하기
+                <button class='ml-5' @click="$emit('confirm')">
+                  확인
                 </button>
                 <v-spacer></v-spacer>
-                <button class='mr-5' @click="$emit('close')">
+                <button class='mr-5' @click="$emit('cancel')">
                   취소
                 </button>
               </v-row>

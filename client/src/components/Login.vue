@@ -10,38 +10,55 @@
     <p>만약 로그인에 문제가 있다면 시장을 개설한 관리자에게 문의 부탁드립니다. 🙇‍♂️</p>
     <div class="danger-alert" v-html="error"/>
     <v-btn color="#0af" @click="login" dark>로그인</v-btn>
+    <AlertModal
+      v-if="alertModal.showModal"
+      @close="alertClose">
+      <h3 slot="header">
+        {{alertModal.header}}
+      </h3>
+      <div slot="body">
+        {{alertModal.body}}
+      </div>
+    </AlertModal>
   </div>
 </template>
 
 <script>
 import MarketsService from '@/services/MarketsService'
 import AuthenticationService from '@/services/AuthenticationService'
+import AlertModal from './Modals/AlertModal'
 export default {
+  components: {
+    AlertModal
+  },
   data () {
     return {
       id: '',
       password: '',
       error: null,
-      title: ''
+      title: '',
+      alertModal: {
+        header: null,
+        body: null,
+        showModal: false
+      }
     }
   },
   async mounted () {
     // Fetch title of the market corresponding to marketId
     const marketId = this.$store.state.route.params.marketId
-
-    // Login state 확인하고 로그인 필요 없이 자동으로 대시보드 혹은 관리자 페이지로 넘기기
-    const isUserLoggedIn = this.$store.state.isUserLoggedIn
-    const userMarketId = this.$store.state.user.MarketId
-    const isAdmin = this.$store.state.user.isAdmin
-
-    if (isUserLoggedIn && userMarketId === marketId) {
-      console.log('login passed')
-      this.switchToMainPage(isAdmin)
+    try {
+      this.title = (await MarketsService.search(marketId)).data.title
+    } catch (err) {
+      this.alertModal.header = '에러 발생'
+      this.alertModal.body = err.response.data.error
+      this.alertModal.showModal = true
     }
-
-    this.title = (await MarketsService.search(marketId)).data.title
   },
   methods: {
+    alertClose () {
+      this.alertModal.showModal = false
+    },
     async login () {
       try {
         const marketId = this.$store.state.route.params.marketId
@@ -62,33 +79,26 @@ export default {
 
         // 관리자 계정으로 로그인 시 관리자 페이지로 넘어가고, 아니면 게스트 대시보드로 넘어가기
         const isAdmin = response.user.isAdmin
-        this.switchToMainPage(isAdmin)
+        if (isAdmin) {
+          this.$router.push({
+            name: 'admin',
+            params: {
+              marketId: marketId
+            }
+          })
+        } else {
+          this.$router.push({
+            name: 'dashboard',
+            params: {
+              marketId: marketId
+            }
+          })
+        }
       } catch (err) {
-        // TODO: 에러 메세지 한글로 사용자 친화적으로 반환하기; 아이디 존재할 때 혹은 그 외
-        console.log(err)
-        this.error = err
-      }
-    },
-    switchToMainPage (isAdmin) {
-      const marketId = this.$store.state.route.params.marketId
-      if (isAdmin) {
-        this.$router.push({
-          name: 'admin',
-          params: {
-            marketId: marketId
-          }
-        })
-      } else {
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            marketId: marketId
-          }
-        })
+        this.error = err.response.data.error
       }
     }
   }
-
 }
 </script>
 
