@@ -247,7 +247,7 @@ export default {
           }
           this.MODE = MODE.DEPOSIT
           this.confirmationModal.header = '입금하기'
-          this.confirmationModal.body = this.depositAmount + '원씩 입급하시겠습니까?'
+          this.confirmationModal.body = this.depositAmount + '원씩 입금하시겠습니까?'
           this.confirmationModal.showModal = true
           break
         case MODE.RESET_PASSWORD:
@@ -304,14 +304,14 @@ export default {
             amount: this.depositAmount
           }
         )).data
-        this.alertModal.header = '입급 성공'
+        this.alertModal.header = '입금 성공'
         if (successUsers.length === 1) {
-          this.alertModal.body = `${selectedUsers[0].name}에게 ${this.depositAmount}원 입급하였습니다.`
+          this.alertModal.body = `${selectedUsers[0].name}에게 ${this.depositAmount}원 입금하였습니다.`
         } else if (successUsers.length > 1) {
-          this.alertModal.body = ` ${this.depositAmount}원씩 ${selectedUsers[0].name}외 ${selectedUsers.length - 1}에게 입급하였습니다.`
+          this.alertModal.body = ` ${this.depositAmount}원씩 ${selectedUsers[0].name}외 ${selectedUsers.length - 1}에게 입금하였습니다.`
         }
       } catch (err) {
-        this.alertModal.header = '입급 실패'
+        this.alertModal.header = '입금 실패'
         this.alertModal.body = err.response.data.error
       }
     },
