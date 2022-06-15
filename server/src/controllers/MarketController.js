@@ -15,13 +15,28 @@ module.exports = {
     try {
       // Get the # of users in each market
       const [markets, ] = await sequelize.query(
-        "SELECT title, COUNT(Users.id) AS NumOfUsers FROM Users JOIN Markets ON Users.MarketId = Markets.id GROUP BY title"
+        "SELECT Markets.id, title, COUNT(Users.id) AS numOfUsers FROM Users JOIN Markets ON Users.marketId = Markets.id GROUP BY title"
       )
       res.send(markets)
     } catch (err) {
       console.log('ERR: fetching markets', err)
       res.status(500).send({
-        error: 'An error has occured trying to fetch all the markets'
+        error: '시장 목록을 가져오는 중 서버에 문제가 생겼습니다. 다시 시도해주세요.'
+      })
+    }
+  },
+  async search (req, res) {
+    try {
+      const market = await Market.findOne({
+        where: {
+          id: req.params.marketId
+        }
+      })
+      const marketJson = market.toJSON()
+      res.send(marketJson)
+    } catch (err) {
+      res.status(400).send({
+        error: '요청하신 시장은 존재하지 않습니다.'
       })
     }
   },
@@ -39,7 +54,7 @@ module.exports = {
       })
       if (market) {
         return res.status(400).send({
-          error: 'The title of market is already in use'
+          error: '동일한 이름의 시장이 존재합니다. 이름을 바꾸어주세요.'
         })
       }
       const newMarket = await Market.create(marketData)
@@ -48,12 +63,12 @@ module.exports = {
       const user = await User.findAll({
         where: {
           name: req.body.name,
-          MarketId: newMarket.id
+          marketId: newMarket.id
         }
       })
       if (!user) {
         return res.status(400).send({
-          error: 'This id is already in use'
+          error: '해당 시장에 같은 아이디가 이미 존재합니다.'
         })
       }
 
@@ -61,25 +76,23 @@ module.exports = {
       const newUserData = {
         name: req.body.name,
         password: req.body.password,
-        MarketId: newMarket.id,
+        marketId: newMarket.id,
         isAdmin: true
       }
 
       // Create the user
       const newUser = await User.create(newUserData)
       const newUserJson = newUser.toJSON()
-      // TODO: Send the created market info and jwt token back (User Id, JWT token)
+      // Send the created market info and jwt token back (User Id, JWT token)
       res.send({
         market: newMarket,
         user: newUserJson,
         token: jwtSignUser(newUserJson)
       })
-
-
     } catch (err) {
       console.log('Create market error', err)
       res.status(500).send({
-        error: 'An error has occured trying to create a market'
+        error: '시장을 개설하는 중 서버에 문제가 생겼습니다. 다시 시도해주세요.'
       })
     }
   },
@@ -88,33 +101,30 @@ module.exports = {
     try {
       // Extract the user info from jwt token
       const userId = req.user.id
-      const userMarketId = req.user.MarketId
-      const {marketId} = req.params
+      const userMarketId = req.user.marketId.toString()
+      const marketId = req.params.marketId.toString()
 
-      // TODO: Check if the user is authroized from jwt token
+      // Check if the user is authroized from jwt token
       const isAuthorized = (await User.findOne({
         where: {
           id: userId,
-          MarketId: userMarketId
+          marketId: userMarketId
         }
       })).isAdmin
 
       // Compare market id from token and url parameter market id
-      if (!userMarketId === marketId || !isAuthorized) {
+
+      if (!(userMarketId === marketId) || !isAuthorized) {
         return res.status(401).send({
-          error: 'You do not have access to delete this market'
+          error: '해당 시장에 권한이 없습니다.'
         })
       }
 
-      const market = await Market.findOne({
-        where: {
-          id: userMarketId
-        }
-      })
+      const market = await Market.findByPk(userMarketId)
       
       if (!market) {
         return res.status(401).send({
-          error: 'This market does not exist anymore.'
+          error: '해당 시장이 존재하지 않습니다.'
         })
       }
       await market.destroy()
@@ -122,7 +132,7 @@ module.exports = {
     } catch (err) {
       console.log(err)
       res.status(500).send({
-        error: "An error has occured trying to delete the market"
+        error: "시장을 삭제하는 중 서버에 에러가 발생했습니다."
       })
     }
   }

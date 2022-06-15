@@ -1,12 +1,14 @@
 const {
   sequelize,
   User,
-  Market
+  Market,
+  Transaction
 } = require('../src/models')
 
 const Promise = require('bluebird')
 const users = require('./users.json')
 const markets = require('./markets.json')
+const transactions = require('./transactions.json')
 
 module.exports = () => {
 sequelize.sync({force: true})
@@ -20,6 +22,11 @@ sequelize.sync({force: true})
     await Promise.all(
       users.map(user => {
         User.create(user)
+      })
+    )
+    await Promise.all(
+      transactions.map(transaction => {
+        Transaction.create(transaction)
       })
     )
   })

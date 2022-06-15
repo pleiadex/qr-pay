@@ -14,7 +14,7 @@ passport.use(
       const user = await User.findOne({
         where: {
           id: jwtPayload.id,
-          MarketId: jwtPayload.MarketId
+          marketId: jwtPayload.marketId
         }
       })
       if (!user) {

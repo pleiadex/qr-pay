@@ -1,0 +1,30 @@
+[
+  {
+    "senderId": 1,
+    "receiverId": 2,
+    "amount": 1000,
+    "marketId": 1,
+    "goods": "Test merchandise 1"
+  },
+  {
+    "senderId": 2,
+    "receiverId": 1,
+    "amount": 500,
+    "marketId": 1,
+    "goods": "Test merchandise 2"
+  },
+  {
+    "senderId": 1,
+    "receiverId": 2,
+    "amount": 1000,
+    "marketId": 2,
+    "goods": "Test merchandise 3"
+  },
+  {
+    "senderId": 3,
+    "receiverId": 2,
+    "amount": 2000,
+    "marketId": 1,
+    "goods": "Test merchandise 4"
+  }
+]

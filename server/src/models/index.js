@@ -27,13 +27,27 @@ fs
 
 
 // Define joinedMarketId foreign key from Market table
-db['Market'].hasMany(db['User'], {
-    allowNull: false,
-    contraints: true,
-    onDelete: 'set null',
-    onUpdate: 'cascade'
-})
-db['User'].belongsTo(db['Market'])
+// db['Market'].hasMany(db['User'], {
+//     allowNull: false,
+//     contraints: true,
+//     onDelete: 'set null',
+//     onUpdate: 'cascade'
+// })
+db['User'].belongsTo(db['Market'], {as: 'market'})
+
+// Transaction 'marketId' references Market 'id' (One to Many)
+// db['Market'].hasMany(db['Transaction'], {
+//     allowNull: false,
+//     contraints: true,
+//     onDelete: 'set null',
+//     onUpdate: 'cascade'
+// })
+db['Transaction'].belongsTo(db['Market'], {as: 'market'})
+
+// Transaction 'senderId' and 'receiverId' reference User 'id' (Many to One)
+db['Transaction'].belongsTo(db['User'], {as: 'sender'})
+db['Transaction'].belongsTo(db['User'], {as: 'receiver'})
+
 
 
 Object.keys(db).forEach(function (modelName) {
